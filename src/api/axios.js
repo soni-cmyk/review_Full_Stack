@@ -1,10 +1,11 @@
 import axios from "axios";
 
 const BASE_URL =
-  import.meta.env.VITE_APP_MODE === "production"
+  import.meta.env.MODE === "production"
     ? import.meta.env.VITE_PROD_API
     : import.meta.env.VITE_LOCAL_API;
-console.log(import.meta.env.VITE_APP_MODE, "======>")
+
+console.log("Backend URL:", BASE_URL, import.meta.env.VITE_PROD_API);
 
 const instance = axios.create({
   baseURL: BASE_URL+"/api"
