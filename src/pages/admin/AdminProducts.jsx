@@ -67,7 +67,7 @@ export default function AdminProducts() {
             >
               <td className="px-6 py-4">
                 <img
-                  src={`http://localhost:5000${p.image.url}`}
+                  src={`${BASE_URL}${p.image.url}`}
                   className="h-12 w-12 object-contain"
                 />
               </td>

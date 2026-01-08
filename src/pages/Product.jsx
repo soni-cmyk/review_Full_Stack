@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import axios from "../api/axios";
+import axios, { BASE_URL } from "../api/axios";
 import { Link } from "react-router-dom";
 
 export default function Products() {
@@ -31,7 +31,7 @@ export default function Products() {
             >
               {/* Product Image */}
               <img
-                src={"http://localhost:5000" + p.image.url}
+                src={BASE_URL + p.image.url}
                 alt={p.name}
                 className="h-48 w-full object-contain"
               />

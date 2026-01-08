@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useParams, Link } from "react-router-dom";
-import axios from "../api/axios";
+import axios, { BASE_URL } from "../api/axios";
 
 export default function ProductView() {
   const { productId } = useParams();
@@ -53,7 +53,7 @@ export default function ProductView() {
         <div className="bg-white rounded-xl shadow p-6 grid md:grid-cols-2 gap-8 text-left">
           <div className="bg-gray-50 rounded-lg flex items-center justify-center p-4">
             <img
-              src={"http://localhost:5000" + product.image.url}
+              src={BASE_URL + product.image.url}
               alt={product.name}
               className="max-h-80 object-contain"
               onError={(e) => (e.target.style.display = "none")}
