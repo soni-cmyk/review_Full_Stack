@@ -4,7 +4,7 @@ const BASE_URL =
   import.meta.env.VITE_APP_MODE === "production"
     ? import.meta.env.VITE_PROD_API
     : import.meta.env.VITE_LOCAL_API;
-console.log(BASE_URL, "======>")
+console.log(import.meta.env.VITE_APP_MODE, "======>")
 
 const instance = axios.create({
   baseURL: BASE_URL+"/api"
