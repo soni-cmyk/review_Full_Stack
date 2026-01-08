@@ -24,9 +24,9 @@ export default function Products() {
       {!loading && products.length > 0 && (
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6 text-left">
         {products.map((p) => (
-          <Link to={`/products/${p._id}`}>
+          <Link to={`/products/${p._id}`} key={p._id}>
             <div
-              key={p._id}
+              
               className="bg-white rounded-lg shadow hover:shadow-lg transition overflow-hidden"
             >
               {/* Product Image */}
