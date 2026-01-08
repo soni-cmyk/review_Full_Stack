@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import axios from "../../api/axios";
 import { useNavigate, useParams } from "react-router-dom";
 import Swal from "sweetalert2";
+import { BASE_URL } from "../../api/axios";
 
 const SUPPLIERS = ["SUP1", "SUP2", "SUP3"];
 
@@ -33,7 +34,7 @@ export default function AddProduct() {
           supplierId: res.data.supplierId,
         });
         if (res.data.image?.url) {
-          setPreview(`http://localhost:5000${res.data.image.url}`);
+          setPreview(`${BASE_URL}${res.data.image.url}`);
         }
       });
     }

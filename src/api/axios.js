@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const BASE_URL =
+export const BASE_URL =
   import.meta.env.MODE === "production"
     ? import.meta.env.VITE_PROD_API
     : import.meta.env.VITE_LOCAL_API;
