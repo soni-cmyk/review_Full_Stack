@@ -42,18 +42,30 @@ export default function Signup() {
       return;
     }
     try {
-      await axios.post("/users/register", {
+      const res = await axios.post("/users/register", {
         firstName: form.firstName,
         lastName: form.lastName,
         email: form.email,
         mobile: form.mobile,
         password: form.password,
       });
+      const { token, role, userId } = res.data?.user;
+      console.log(token, role, userId)
+      // Store auth info
+      localStorage.setItem("token", token);
+      localStorage.setItem("role", role);
+      localStorage.setItem("userId", userId);
       Swal.fire({
         title: "Account Created Successfully",
         text: "You can now login with your credentials",
         icon: "success",
-      }).then(() => navigate("/"));
+      });
+      // Role-based redirect after login
+      if (role === "admin") {
+        navigate("/admin/products");
+      } else {
+        navigate("/products");
+      }
     } catch (err) {
       Swal.fire({
         icon: "error",
@@ -72,7 +84,7 @@ export default function Signup() {
     >
       <div className="w-full max-w-md bg-white rounded-xl shadow-lg p-8">
         <h2 className="text-2xl font-bold text-center text-gray-800 mb-6">
-          Create  Account
+          Create Account
         </h2>
         {/* First Name */}
         <div className="mb-4">
@@ -172,8 +184,11 @@ export default function Signup() {
         </button>
         <p className="text-sm text-center text-gray-600 mt-4">
           Already have an account?
-          <Link to="/" className="text-blue-600 hover:text-blue-800 font-medium ml-1">
-             Login
+          <Link
+            to="/"
+            className="text-blue-600 hover:text-blue-800 font-medium ml-1"
+          >
+            Login
           </Link>
         </p>
       </div>
