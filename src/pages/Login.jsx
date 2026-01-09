@@ -3,10 +3,13 @@ import axios from "../api/axios";
 import { useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
 import { Link } from "react-router-dom";
+import { Eye, EyeOff } from "lucide-react";
 
 export default function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [errors, setErrors] = useState({});
+  const [showPassword, setShowPassword] = useState(false);
   const navigate = useNavigate();
 
   // Redirect if already logged in
@@ -22,8 +25,18 @@ export default function Login() {
     }
   }, [navigate]);
 
+    // Validation
+  const validate = () => {
+    const newErrors = {};
+    if (!email) newErrors.email = "* Email is required";
+    if (!password) newErrors.password = "* Password is required";
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  };
+
   const submit = async (e) => {
     e.preventDefault();
+    if (!validate()) return;
     try {
       const res = await axios.post("/users/login", {
         email,
@@ -65,29 +78,40 @@ export default function Login() {
         </h2>
 
         <div className="mb-4 text-left">
-          <label className="block text-sm text-gray-600 mb-1">Email</label>
+          <label className="block text-sm text-gray-600 mb-1" >Email <span className="text-red-500">*</span></label>
           <input
             className="border border-gray-300 rounded-md p-2 w-full focus:outline-none focus:ring-2 focus:ring-blue-500"
             type="email"
             placeholder="Enter your email"
             onChange={(e) => setEmail(e.target.value)}
-            required
+            value={email}
           />
+          {errors.email && (
+            <p className="text-red-500 text-xs mt-1">{errors.email}</p>
+          )}
         </div>
 
-        <div className="mb-4">
-          <label className="block text-sm text-gray-600 mb-1 text-left">
-            Password
+        <div className="mb-4 relative">
+          <label className="block text-sm font-medium text-gray-600 mb-1">
+            Password <span className="text-red-500">*</span>
           </label>
           <input
-            className="border border-gray-300 rounded-md p-2 w-full focus:outline-none focus:ring-2 focus:ring-blue-500"
-            type="password"
-            placeholder="Enter your password"
+            name="password"
+            value={password}
             onChange={(e) => setPassword(e.target.value)}
-            required
+            type={showPassword ? "text" : "password"}
+            className="w-full rounded-md border border-gray-300 px-3 py-2 pr-10 focus:outline-none focus:ring-2 focus:ring-blue-500"
           />
+          <span
+            onClick={() => setShowPassword(!showPassword)}
+            className="absolute right-3 top-9 cursor-pointer select-none"
+          >
+            {showPassword ? <EyeOff color="gray" /> : <Eye color="gray" />}
+          </span>
+          {errors.password && (
+            <p className="text-red-500 text-xs mt-1">{errors.password}</p>
+          )}
         </div>
-
         <button
           type="submit"
           className="bg-blue-600 hover:bg-blue-700 transition text-white font-medium p-2 w-full rounded-md mt-2"
