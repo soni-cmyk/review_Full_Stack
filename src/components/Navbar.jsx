@@ -25,7 +25,8 @@ const Navbar = () => {
     <nav className="w-full max-w-7xl mx-auto text-white px-6 py-4 flex items-center justify-between">
       {/* Logo */}
       <Link to={role === "admin" ? "/admin/products" : "/products"} className="text-2xl font-semibold hover:underline transition">
-        MyShop</Link>
+        ShopEasy
+      </Link>
       {/* Menu */}
       <ul className="flex items-center gap-6 text-sm font-medium">
         {/* Admin Links */}
@@ -37,6 +38,14 @@ const Navbar = () => {
                 className="hover:text-yellow-400 transition"
               >
                  Products
+              </Link>
+            </li>
+            <li>
+              <Link
+                to="/admin/banner-upload"
+                className="hover:text-yellow-400 transition"
+              >
+                Banner Upload
               </Link>
             </li>
             <li className="relative">

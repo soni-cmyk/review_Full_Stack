@@ -21,6 +21,8 @@
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
     "react-router-dom": "^6.23.1",
+    "react-slick": "^0.31.0",
+    "slick-carousel": "^1.8.1",
     "sweetalert2": "^11.26.10",
     "tailwindcss": "^4.1.18"
   },

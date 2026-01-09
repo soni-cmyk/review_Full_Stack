@@ -10,7 +10,8 @@ import AdminRoute from "./routes/AdminRoute";
 import Navbar from "./components/Navbar";
 import AdminProducts from "./pages/admin/AdminProducts";
 import ProductView from "./pages/ProductView";
-
+import Banner from "./components/Banner";
+import BannerUpload from "./pages/admin/BannerUpload";
 const Layout = () => {
   const location = useLocation();
 
@@ -32,6 +33,7 @@ const Layout = () => {
           path="/products"
           element={
             <UserRoute>
+              <Banner />
               <Products />
             </UserRoute>
           }
@@ -83,6 +85,13 @@ const Layout = () => {
           element={
             <AdminRoute>
               <AdminReviews />
+            </AdminRoute>
+          }
+        />
+        <Route path="/admin/banner-upload"
+          element={
+            <AdminRoute>
+              <BannerUpload />
             </AdminRoute>
           }
         />
