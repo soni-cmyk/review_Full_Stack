@@ -4,6 +4,7 @@ import { Link } from "react-router-dom";
 import Swal from "sweetalert2";
 import AdminTable from "../../components/AdminTable";
 import { confirmDelete } from "../../utils/confirmDelete";
+import { BASE_URL } from "../../api/axios";
 
 export default function AdminProducts() {
   const [products, setProducts] = useState([]);
