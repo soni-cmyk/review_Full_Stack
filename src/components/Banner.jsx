@@ -40,17 +40,17 @@ const Banner = () => {
   // loading UI
   if (!slides || slides.length === 0) {
     return (
-      <section className="h-[50vh] flex items-center justify-center bg-gray-100">
+      <section className="h-[400px]  flex items-center justify-center bg-gray-100">
         <p className="text-gray-500">No banners available</p>
       </section>
     );
   }
 
   return (
-    <section className="h-[50vh] overflow-hidden">
+    <section className="h-[400px]  overflow-hidden">
       <Slider {...settings} className="h-full">
         {slides.map((slide, index) => (
-          <div key={index} className="relative h-[50vh]">
+          <div key={index} className="relative h-[400px] ">
             {/* Background Image */}
             <img
               src={BASE_URL + slide.imageUrl}
