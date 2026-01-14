@@ -41,7 +41,7 @@ export default function Products() {
                 <h3 className="text-lg font-semibold text-gray-800">
                   {p.name}
                 </h3>
-                <p className="text-gray-600 text-sm mt-1">{p.desc}</p>
+                <p className="text-gray-600 text-sm mt-1">{p.desc?.substring(0, 25)}...</p>
                 <div className="flex items-center gap-2 mt-2">
                   {/* Stars */}
                   <div className="flex items-center">

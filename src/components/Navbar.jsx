@@ -2,16 +2,24 @@ import { Link, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { useReview } from "../context/ReviewContext";
 import { Menu, X } from "lucide-react"; 
-
+import axios, { BASE_URL } from "../api/axios"
 const Navbar = () => {
   const navigate = useNavigate();
   const [role, setRole] = useState(null);
   const [menuOpen, setMenuOpen] = useState(false);
   const { fakeReviewCount } = useReview();
+  const [logo, setLogo] = useState(null);
 
   useEffect(() => {
     const storedRole = localStorage.getItem("role");
     setRole(storedRole);
+     
+    // Fetch logo on component mount
+    getLogo().then((data)=>{
+      const activeLogo = data.find(l => l.isActive === true);
+      setLogo(activeLogo || null);
+    });
+
   }, []);
 
   const handleLogout = () => {
@@ -22,6 +30,16 @@ const Navbar = () => {
     setMenuOpen(false);
   };
 
+  const getLogo = async ()=>{
+    const logoUrl = await axios.get("/logos", {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("token")}`,
+      },
+    });
+    const data = await logoUrl.data;
+    return data;
+  }
+
   return (
     <div className="bg-gray-900">
       <nav className="w-full max-w-7xl mx-auto text-white px-6 py-4 flex items-center justify-between">
@@ -30,7 +48,7 @@ const Navbar = () => {
           to={role === "admin" ? "/admin/products" : "/products"}
           className="text-2xl font-semibold hover:underline transition"
         >
-          ShopEasy
+         <img src={logo ? BASE_URL + logo?.logoUrl : "https://via.placeholder.com/150x50?text=Logo"} alt="Logo" className="h-8"/> 
         </Link>
 
         {/* Hamburger (Mobile) */}
@@ -83,6 +101,24 @@ const Navbar = () => {
                       {fakeReviewCount}
                     </span>
                   )}
+                </Link>
+              </li>
+              <li className="px-6 py-2 md:p-0">
+                <Link
+                  to="/admin/template"
+                  onClick={() => setMenuOpen(false)}
+                  className="hover:text-yellow-400 transition"
+                >
+                  Page Editor
+                </Link>
+              </li>
+              <li className="px-6 py-2 md:p-0">
+                <Link
+                  to="/admin/settings"
+                  onClick={() => setMenuOpen(false)}
+                  className="hover:text-yellow-400 transition"
+                >
+                  Settings
                 </Link>
               </li>
             </>

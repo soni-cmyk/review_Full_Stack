@@ -73,7 +73,7 @@ export default function BannerUpload() {
         Authorization: `Bearer ${token}`,
       },
     });
-
+    
     Swal.fire(
       "Success",
       `Banner ${editingId ? "updated" : "created"} successfully`,

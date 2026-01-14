@@ -12,6 +12,12 @@ import AdminProducts from "./pages/admin/AdminProducts";
 import ProductView from "./pages/ProductView";
 import Banner from "./components/Banner";
 import BannerUpload from "./pages/admin/BannerUpload";
+import "quill/dist/quill.snow.css";
+
+import TemplateViewer from "./pages/TemplateViewer";
+import PageEditor from "./pages/admin/PageEditor";
+import AdminSettings from "./pages/admin/settings/AdminSettings";
+
 const Layout = () => {
   const location = useLocation();
 
@@ -54,6 +60,14 @@ const Layout = () => {
             </UserRoute>
           }
         />
+        <Route
+          path="/template/:slug"
+          element={
+            <UserRoute>
+             <TemplateViewer />
+            </UserRoute>
+          }
+        />
 
         {/* Admin */}
         <Route
@@ -92,6 +106,20 @@ const Layout = () => {
           element={
             <AdminRoute>
               <BannerUpload />
+            </AdminRoute>
+          }
+        />
+        <Route path="/admin/template"
+          element={
+            <AdminRoute>
+              <PageEditor />
+            </AdminRoute>
+          }
+        />
+        <Route path="/admin/settings"
+          element={
+            <AdminRoute>
+              <AdminSettings />
             </AdminRoute>
           }
         />
