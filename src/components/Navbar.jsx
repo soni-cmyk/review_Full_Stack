@@ -48,7 +48,7 @@ const Navbar = () => {
           to={role === "admin" ? "/admin/products" : "/products"}
           className="text-2xl font-semibold hover:underline transition"
         >
-         <img src={logo ? BASE_URL + logo?.logoUrl : "https://via.placeholder.com/150x50?text=Logo"} alt="Logo" className="h-8"/> 
+         <img src={logo ? BASE_URL + logo?.logoUrl : "MY App"} alt="Logo" className="h-8"/> 
         </Link>
 
         {/* Hamburger (Mobile) */}
