@@ -1,26 +1,39 @@
 import { Link, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { useReview } from "../context/ReviewContext";
-import { Menu, X } from "lucide-react"; 
-import axios, { BASE_URL } from "../api/axios"
+import { Menu, X } from "lucide-react";
+import axios, { BASE_URL } from "../api/axios";
+
 const Navbar = () => {
   const navigate = useNavigate();
   const [role, setRole] = useState(null);
   const [menuOpen, setMenuOpen] = useState(false);
   const { fakeReviewCount } = useReview();
   const [logo, setLogo] = useState(null);
+  const [pages, setPages] = useState([]);
 
   useEffect(() => {
     const storedRole = localStorage.getItem("role");
     setRole(storedRole);
-     
-    // Fetch logo on component mount
-    getLogo().then((data)=>{
-      const activeLogo = data.find(l => l.isActive === true);
-      setLogo(activeLogo || null);
-    });
 
+    fetchLogo();
+    fetchPages();
   }, []);
+
+  const fetchLogo = async () => {
+    const res = await axios.get("/logos");
+    const activeLogo = res.data.find((l) => l.isActive === true);
+    setLogo(activeLogo || null);
+  };
+
+  const fetchPages = async () => {
+    try {
+      const res = await axios.get("/templates");
+      setPages(res.data);
+    } catch (err) {
+      console.error("Failed to load pages");
+    }
+  };
 
   const handleLogout = () => {
     localStorage.removeItem("token");
@@ -30,30 +43,28 @@ const Navbar = () => {
     setMenuOpen(false);
   };
 
-  const getLogo = async ()=>{
-    const logoUrl = await axios.get("/logos", {
-      headers: {
-        Authorization: `Bearer ${localStorage.getItem("token")}`,
-      },
-    });
-    const data = await logoUrl.data;
-    return data;
-  }
-
   return (
     <div className="bg-gray-900">
       <nav className="w-full max-w-7xl mx-auto text-white px-6 py-4 flex items-center justify-between">
         {/* Logo */}
         <Link
           to={role === "admin" ? "/admin/products" : "/products"}
-          className="text-2xl font-semibold hover:underline transition"
+          onClick={() => setMenuOpen(false)}
         >
-         <img src={logo ? BASE_URL + logo?.logoUrl : "MY App"} alt="Logo" className="h-8"/> 
+          {logo ? (
+            <img
+              src={BASE_URL + logo.logoUrl}
+              alt="Logo"
+              className="h-8 object-contain"
+            />
+          ) : (
+            <span className="text-2xl font-semibold">My App</span>
+          )}
         </Link>
 
-        {/* Hamburger (Mobile) */}
+        {/* Hamburger */}
         <button
-          className="md:hidden text-white"
+          className="md:hidden"
           onClick={() => setMenuOpen(!menuOpen)}
         >
           {menuOpen ? <X size={24} /> : <Menu size={24} />}
@@ -69,90 +80,59 @@ const Navbar = () => {
           {/* Admin Links */}
           {role === "admin" && (
             <>
-              <li className="px-6 py-2 md:p-0">
-                <Link
-                  to="/admin/products"
-                  onClick={() => setMenuOpen(false)}
-                  className="hover:text-yellow-400 transition"
-                >
-                  Products
-                </Link>
-              </li>
-
-              <li className="px-6 py-2 md:p-0">
-                <Link
-                  to="/admin/banner-upload"
-                  onClick={() => setMenuOpen(false)}
-                  className="hover:text-yellow-400 transition"
-                >
-                  Banner Upload
-                </Link>
-              </li>
-
-              <li className="relative px-6 py-2 md:p-0">
-                <Link
-                  to="/admin/reviews"
-                  onClick={() => setMenuOpen(false)}
-                  className="hover:text-yellow-400 transition flex items-center gap-2"
-                >
+              <li><Link to="/admin/products">Products</Link></li>
+              <li><Link to="/admin/banner-upload">Banner Upload</Link></li>
+              <li className="relative">
+                <Link to="/admin/reviews" className="flex gap-2">
                   Fake Reviews
                   {fakeReviewCount > 0 && (
-                    <span className="bg-red-500 text-white absolute -top-2 -right-2 text-xs rounded-full h-5 w-5 flex items-center justify-center">
+                    <span className="bg-red-500 text-xs rounded-full h-5 w-5 flex items-center justify-center">
                       {fakeReviewCount}
                     </span>
                   )}
                 </Link>
               </li>
-              <li className="px-6 py-2 md:p-0">
-                <Link
-                  to="/admin/template"
-                  onClick={() => setMenuOpen(false)}
-                  className="hover:text-yellow-400 transition"
-                >
-                  Page Editor
-                </Link>
-              </li>
-              <li className="px-6 py-2 md:p-0">
-                <Link
-                  to="/admin/settings"
-                  onClick={() => setMenuOpen(false)}
-                  className="hover:text-yellow-400 transition"
-                >
-                  Settings
-                </Link>
-              </li>
+              <li><Link to="/admin/template">Page Editor</Link></li>
+              <li><Link to="/admin/settings">Settings</Link></li>
             </>
           )}
 
-          {/* User Links */}
+          {/* User Links (DYNAMIC) */}
           {role === "user" && (
-            <li className="px-6 py-2 md:p-0">
-              <Link
-                to="/products"
-                onClick={() => setMenuOpen(false)}
-                className="hover:text-yellow-400 transition"
-              >
-                Products
-              </Link>
-            </li>
+            <>
+              <li>
+                <Link to="/products">Products</Link>
+              </li>
+
+              {pages.map((page) => (
+                <li key={page._id}>
+                  <Link
+                    to={`/template/${page.slug}`}
+                    onClick={() => setMenuOpen(false)}
+                    className="hover:text-yellow-400 transition"
+                  >
+                    {page.title}
+                  </Link>
+                </li>
+              ))}
+            </>
           )}
 
-          {/* Auth Buttons */}
+          {/* Auth */}
           {role ? (
-            <li className="px-6 py-2 md:p-0">
+            <li>
               <button
                 onClick={handleLogout}
-                className="bg-red-500 hover:bg-red-600 px-4 py-1.5 rounded-md transition w-full md:w-auto"
+                className="bg-red-500 px-4 py-1.5 rounded-md"
               >
                 Logout
               </button>
             </li>
           ) : (
-            <li className="px-6 py-2 md:p-0">
+            <li>
               <Link
                 to="/"
-                onClick={() => setMenuOpen(false)}
-                className="bg-blue-500 hover:bg-blue-600 px-4 py-1.5 rounded-md transition block text-center"
+                className="bg-blue-500 px-4 py-1.5 rounded-md"
               >
                 Login
               </Link>

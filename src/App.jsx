@@ -12,11 +12,12 @@ import AdminProducts from "./pages/admin/AdminProducts";
 import ProductView from "./pages/ProductView";
 import Banner from "./components/Banner";
 import BannerUpload from "./pages/admin/BannerUpload";
-import "quill/dist/quill.snow.css";
-
+import ReactQuill from "react-quill";
+import "react-quill/dist/quill.snow.css";
 import TemplateViewer from "./pages/TemplateViewer";
 import PageEditor from "./pages/admin/PageEditor";
 import AdminSettings from "./pages/admin/settings/AdminSettings";
+import NotFound from "./components/NotFound";
 
 const Layout = () => {
   const location = useLocation();
@@ -33,7 +34,7 @@ const Layout = () => {
         {/* Auth */}
         <Route path="/" element={<Login />} />
         <Route path="/signup" element={<Signup />} />
-
+         <Route path="/404" element={<NotFound />} />
         {/* User */}
         <Route
           path="/products"
@@ -61,7 +62,7 @@ const Layout = () => {
           }
         />
         <Route
-          path="/template/:slug"
+          path="/template/:slug"  
           element={
             <UserRoute>
              <TemplateViewer />
