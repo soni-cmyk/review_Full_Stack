@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import axios from "../../api/axios";
-import AdminTable from "../../components/AdminTable";
+import AdminTable from "../../components/admin/AdminTable";
 import Swal from "sweetalert2";
 
 export default function BannerUpload() {

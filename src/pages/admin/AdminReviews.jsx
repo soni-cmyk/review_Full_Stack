@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import axios from "../../api/axios";
 import { useReview } from "../../context/ReviewContext";
 import Swal from "sweetalert2";
-import AdminTable from "../../components/AdminTable";
+import AdminTable from "../../components/admin/AdminTable";
 import { confirmDelete } from "../../utils/confirmDelete";
 
 export default function AdminReviews() {

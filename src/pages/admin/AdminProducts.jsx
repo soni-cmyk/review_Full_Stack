@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import axios from "../../api/axios";
 import { Link } from "react-router-dom";
 import Swal from "sweetalert2";
-import AdminTable from "../../components/AdminTable";
+import AdminTable from "../../components/admin/AdminTable";
 import { confirmDelete } from "../../utils/confirmDelete";
 
 export default function AdminProducts() {

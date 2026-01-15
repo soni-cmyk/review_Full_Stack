@@ -12,29 +12,28 @@ import AdminProducts from "./pages/admin/AdminProducts";
 import ProductView from "./pages/ProductView";
 import Banner from "./components/Banner";
 import BannerUpload from "./pages/admin/BannerUpload";
-import ReactQuill from "react-quill";
-import "react-quill/dist/quill.snow.css";
 import TemplateViewer from "./pages/TemplateViewer";
 import PageEditor from "./pages/admin/PageEditor";
 import AdminSettings from "./pages/admin/settings/AdminSettings";
 import NotFound from "./components/NotFound";
+import AdminLayout from "./pages/admin/AdminLayout";
+import AdminDashboard from "./pages/admin/AdminDashboard";
 
 const Layout = () => {
   const location = useLocation();
 
-  // Hide navbar on auth pages
   const hideNavbar =
     location.pathname === "/" || location.pathname === "/signup";
 
   return (
     <div className="w-full bg-gray-100">
-      {!hideNavbar && <Navbar />}
-
+      {!hideNavbar && !location.pathname.includes("/admin") && <Navbar />}
       <Routes>
         {/* Auth */}
         <Route path="/" element={<Login />} />
         <Route path="/signup" element={<Signup />} />
-         <Route path="/404" element={<NotFound />} />
+        <Route path="/404" element={<NotFound />} />
+
         {/* User */}
         <Route
           path="/products"
@@ -62,68 +61,33 @@ const Layout = () => {
           }
         />
         <Route
-          path="/template/:slug"  
+          path="/template/:slug"
           element={
             <UserRoute>
-             <TemplateViewer />
+              <TemplateViewer />
             </UserRoute>
           }
         />
 
-        {/* Admin */}
+        {/* ADMIN WITH SIDEBAR */}
         <Route
-          path="/admin/products"
+          path="/admin"
           element={
             <AdminRoute>
-              <AdminProducts />
+              <AdminLayout />
             </AdminRoute>
           }
-        />
-        <Route
-          path="/admin/add-product"
-          element={
-            <AdminRoute>
-              <AddProduct />
-            </AdminRoute>
-          }
-        />
-        <Route
-          path="/admin/add-product/:productId"
-          element={
-            <AdminRoute>
-              <AddProduct />
-            </AdminRoute>
-          }
-        />
-        <Route
-          path="/admin/reviews"
-          element={
-            <AdminRoute>
-              <AdminReviews />
-            </AdminRoute>
-          }
-        />
-        <Route path="/admin/banner-upload"
-          element={
-            <AdminRoute>
-              <BannerUpload />
-            </AdminRoute>
-          }
-        />
-        <Route path="/admin/template"
-          element={
-            <AdminRoute>
-              <PageEditor />
-            </AdminRoute>
-          }
-        />
-        <Route path="/admin/settings"
-          element={
-            <AdminRoute>
-              <AdminSettings />
-            </AdminRoute>
-          }
-        />
+        >
+          <Route path="dashboard" element={<AdminDashboard />} />
+          <Route path="categories" element={<div>Admin Categories</div>} />
+          <Route path="products" element={<AdminProducts />} />
+          <Route path="add-product" element={<AddProduct />} />
+          <Route path="add-product/:productId" element={<AddProduct />} />
+          <Route path="reviews" element={<AdminReviews />} />
+          <Route path="banner-upload" element={<BannerUpload />} />
+          <Route path="template" element={<PageEditor />} />
+          <Route path="settings" element={<AdminSettings />} />
+        </Route>
       </Routes>
     </div>
   );
