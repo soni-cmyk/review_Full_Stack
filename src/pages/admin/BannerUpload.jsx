@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import axios, { BASE_URL } from "../../api/axios";
+import axios from "../../api/axios";
 import AdminTable from "../../components/AdminTable";
 import Swal from "sweetalert2";
 
@@ -32,6 +32,7 @@ export default function BannerUpload() {
       setBanners(res.data.data || res.data);
     } finally {
       setLoading(false);
+
     }
   };
 
@@ -79,7 +80,14 @@ export default function BannerUpload() {
       `Banner ${editingId ? "updated" : "created"} successfully`,
       "success"
     );
-
+    setBannerForm({
+      title: "",
+      description: "",
+      buttonText: "",
+      buttonLink: "",
+      link: "",
+      isActive: true,
+    });
     resetForm();
     fetchBanners();
   };
@@ -95,7 +103,7 @@ export default function BannerUpload() {
       link: banner.link || "",
       isActive: banner.isActive,
     });
-    setPreview(`${BASE_URL}${banner.imageUrl}`);
+    setPreview(`${banner.imageUrl}`);
     setShowForm(true);
   };
 
@@ -256,7 +264,7 @@ export default function BannerUpload() {
               >
                 <td className="px-6 py-4">
                   <img
-                    src={`${BASE_URL}${banner.imageUrl}`}
+                    src={`${banner.imageUrl}`}
                     className="h-10 object-cover rounded"
                     alt={banner.title}
                   />

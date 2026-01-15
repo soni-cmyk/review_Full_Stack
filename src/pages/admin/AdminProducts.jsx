@@ -4,7 +4,6 @@ import { Link } from "react-router-dom";
 import Swal from "sweetalert2";
 import AdminTable from "../../components/AdminTable";
 import { confirmDelete } from "../../utils/confirmDelete";
-import { BASE_URL } from "../../api/axios";
 
 export default function AdminProducts() {
   const [products, setProducts] = useState([]);
@@ -68,7 +67,7 @@ export default function AdminProducts() {
             >
               <td className="px-6 py-4">
                 <img
-                  src={`${BASE_URL}${p.image.url}`}
+                  src={`${p.image.url}`}
                   className="h-12 w-12 object-contain"
                 />
               </td>

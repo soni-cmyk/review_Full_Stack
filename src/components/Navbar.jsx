@@ -2,7 +2,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { useReview } from "../context/ReviewContext";
 import { Menu, X } from "lucide-react";
-import axios, { BASE_URL } from "../api/axios";
+import axios from "../api/axios";
 
 const Navbar = () => {
   const navigate = useNavigate();
@@ -53,7 +53,7 @@ const Navbar = () => {
         >
           {logo ? (
             <img
-              src={BASE_URL + logo.logoUrl}
+              src={logo.logoUrl}
               alt="Logo"
               className="h-8 object-contain"
             />

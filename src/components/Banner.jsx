@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import Slider from "react-slick";
-import axios, { BASE_URL } from "../api/axios";
+import axios from "../api/axios";
 
 const Banner = () => {
   const [slides, setSlides] = useState([]);
@@ -53,7 +53,7 @@ const Banner = () => {
           <div key={index} className="relative h-[400px] ">
             {/* Background Image */}
             <img
-              src={BASE_URL + slide.imageUrl}
+              src={slide.imageUrl}
               alt={slide.title}
               className="absolute inset-0 h-full w-full object-cover"
             />

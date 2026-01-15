@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
-import axios, { BASE_URL } from "../../../api/axios";
+import axios from "../../../api/axios";
+import Swal from "sweetalert2";
 
 const AdminSettings = () => {
   const [logoFile, setLogoFile] = useState(null);
@@ -38,7 +39,7 @@ const AdminSettings = () => {
       headers: { "Content-Type": "multipart/form-data" },
     });
 
-    alert("Logo uploaded");
+    Swal.fire("Success", "Logo uploaded successfully", "success");
     setLogoFile(null);
     setPreview("");
     setLogoWidth("");
@@ -56,7 +57,7 @@ const AdminSettings = () => {
 
         {activeLogo ? (
           <img
-            src={BASE_URL + activeLogo.logoUrl}
+            src={activeLogo.logoUrl}
             alt="logo"
             style={{
               width: activeLogo.logoWidth || "auto",
