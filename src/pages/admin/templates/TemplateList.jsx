@@ -28,7 +28,7 @@ export default function TemplateList() {
 
     if (!confirmed) return;
 
-    await axios.delete(`/template/${id}`);
+    await axios.delete(`/templates/${id}`);
     Swal.fire("Deleted!", "Product deleted successfully", "success");
     fetchtemplate();
   };
