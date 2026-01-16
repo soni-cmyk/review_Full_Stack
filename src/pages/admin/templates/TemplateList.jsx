@@ -76,7 +76,7 @@ export default function TemplateList() {
                     <Link to={`/admin/add-template/${p.slug}`}>
                       <Pencil size={18} />
                     </Link>
-                    <button onClick={() => deleteProduct(p._id)}>
+                    <button onClick={() => deleteProduct(p.slug)}>
                       <Trash2 size={18} color="red" />
                     </button>
                   </div>
