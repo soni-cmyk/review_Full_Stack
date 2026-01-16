@@ -13,11 +13,13 @@ import ProductView from "./pages/ProductView";
 import Banner from "./components/Banner";
 import BannerUpload from "./pages/admin/BannerUpload";
 import TemplateViewer from "./pages/TemplateViewer";
-import PageEditor from "./pages/admin/PageEditor";
 import AdminSettings from "./pages/admin/settings/AdminSettings";
 import NotFound from "./components/NotFound";
 import AdminLayout from "./pages/admin/AdminLayout";
 import AdminDashboard from "./pages/admin/AdminDashboard";
+import AdminTemplate from "./pages/admin/AdminTemplate";
+import PageEditor from "./pages/admin/templates/PageEditor";
+import ViewTemplate from "./pages/admin/templates/ViewTemplate";
 
 const Layout = () => {
   const location = useLocation();
@@ -85,7 +87,10 @@ const Layout = () => {
           <Route path="add-product/:productId" element={<AddProduct />} />
           <Route path="reviews" element={<AdminReviews />} />
           <Route path="banner-upload" element={<BannerUpload />} />
-          <Route path="template" element={<PageEditor />} />
+          <Route path="template" element={<AdminTemplate />} />
+          <Route path="add-template" element={<PageEditor />} />
+          <Route path="add-template/:templateId" element={<PageEditor />} />
+          <Route path="template/:slug" element={<ViewTemplate />} />
           <Route path="settings" element={<AdminSettings />} />
         </Route>
       </Routes>

@@ -42,11 +42,12 @@ export default function Login() {
         email,
         password,
       });
-      const { token, role, userId } = res.data;
+      const { token, role, userId , user} = res.data;
       // Store auth info
       localStorage.setItem("token", token);
       localStorage.setItem("role", role);
       localStorage.setItem("userId", userId);
+      localStorage.setItem("userData", JSON.stringify(user));
       Swal.fire({
         title: "Success!",
         text: "You have successfully logged in!",

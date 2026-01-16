@@ -1,5 +1,17 @@
 // components/admin/Sidebar.jsx
+import {
+  ChartBarStacked,
+  Image,
+  LayoutDashboard,
+  MessageSquareDiff,
+  PackageSearch,
+  NotepadText,
+  Settings,
+  Users,
+  LogOut,
+} from "lucide-react";
 import { NavLink } from "react-router-dom";
+import Swal from "sweetalert2";
 
 const Sidebar = () => {
   const linkClass = ({ isActive }) =>
@@ -7,36 +19,53 @@ const Sidebar = () => {
       isActive ? "bg-blue-600 text-white" : "text-gray-300 hover:bg-gray-700"
     }`;
 
-  return (
-    <aside className="w-64 bg-slate-900 text-white p-4">
-      <h2 className="text-xl font-bold mb-6">AdminPanel</h2>
+  const handleLogout = () => {
+    Swal.fire({
+      title: 'Are you sure you want to logout?',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Yes, logout!'
+    }).then((result) => {
+      if (result.isConfirmed) {
+        localStorage.clear();
+        window.location.href = "/";
+      }
+    });
+  };
 
-      <nav className="space-y-2">
+  return (
+    <aside className="w-64 bg-slate-900 text-white flex flex-col">
+      <h2 className="text-xl font-bold p-5 border-b border-gray-700 text-center">AdminPanel</h2>
+      <nav className="space-y-2 p-4 text-md font-medium flex-1">
         <NavLink to="/admin/dashboard" className={linkClass}>
-          Dashboard
-        </NavLink>
+          <LayoutDashboard /> Dashboard
+        </NavLink> 
         <NavLink to="/admin/categories" className={linkClass}>
-          Categories
+          <ChartBarStacked /> Categories
         </NavLink>
         <NavLink to="/admin/reviews" className={linkClass}>
-          Reviews
+          <MessageSquareDiff /> Fake Reviews
         </NavLink>
         <NavLink to="/admin/products" className={linkClass}>
-          Products
+          <PackageSearch /> Products
         </NavLink>
         <NavLink to="/admin/template" className={linkClass}>
-          Pages
+          <NotepadText /> Pages
         </NavLink>
         <NavLink to="/admin/banner-upload" className={linkClass}>
-          Banners
+          <Image /> Banners
         </NavLink>
         <NavLink to="/admin/settings" className={linkClass}>
-          Settings
+          <Settings /> Settings
         </NavLink>
       </nav>
 
-      <div className="mt-10 text-sm text-red-400 cursor-pointer">
-        Logout
+      <div className="mt-auto  text-white cursor-pointer border-t border-gray-700 flex items-center gap-2 p-5 hover:bg-gray-700">
+        <button className="flex items-center text-md gap-2 w-full" onClick={handleLogout}>
+        <LogOut /> Logout
+       </button>
       </div>
     </aside>
   );
