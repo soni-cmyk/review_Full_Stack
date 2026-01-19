@@ -13,14 +13,6 @@ export default function AdminTable({
     );
   }
 
-  if (!loading && data.length === 0) {
-    return (
-      <div className="p-6 text-center text-gray-600">
-        {emptyText}
-      </div>
-    );
-  }
-
   return (
     <div className="overflow-x-auto rounded-lg">
       <table className="min-w-full text-sm text-left">
@@ -35,6 +27,15 @@ export default function AdminTable({
         </thead>
 
         <tbody>
+          {
+            data.length === 0 && (
+              <tr>
+                <td colSpan={columns.length} className="px-6 py-4 text-center">
+                  {emptyText}
+                </td>
+              </tr>
+            )
+          }
           {data.map(renderRow)}
         </tbody>
       </table>

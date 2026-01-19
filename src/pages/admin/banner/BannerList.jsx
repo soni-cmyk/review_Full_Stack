@@ -4,6 +4,7 @@ import AdminTable from "../../../components/admin/AdminTable";
 import Swal from "sweetalert2";
 import { useNavigate } from "react-router-dom";
 import { Pencil, ToggleLeft, ToggleRight, Trash2 } from "lucide-react";
+import AdminMainHeader from "../../../components/admin/AdminMainHeader";
 
 export default function BannerList({
   addBanner,
@@ -54,92 +55,102 @@ export default function BannerList({
     await axios.patch(
       `/banners/${id}/toggle`,
       { isActive: !status },
-      { headers: { Authorization: `Bearer ${token}` } }
+      { headers: { Authorization: `Bearer ${token}` } },
     );
     fetchBanners();
   };
 
   return (
-    <div className="p-6">
-      <div className="bg-white rounded-lg shadow">
-        <div className="flex justify-between items-center p-6 border-b border-gray-200">
-          <h2 className="text-xl font-bold">Banner Management</h2>
-          <button
-            onClick={() => setAddBanner(true)}
-            className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-md text-sm"
-          >
-            + Add Banner
-          </button>
+    <div>
+      <div className="flex justify-between items-center p-6">
+        <AdminMainHeader title="Manage Banners" />
+        <button
+          onClick={() => setAddBanner(true)}
+          className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-md text-sm"
+        >
+          + Add Banner
+        </button>
+      </div>
+      <div className="px-6 pb-6">
+        <div className="bg-white rounded-lg shadow">
+          <AdminTable
+            loading={loading}
+            data={banners}
+            emptyText="No banners found"
+            columns={[
+              "Image",
+              "Title",
+              "Description",
+              "Button",
+              "Link",
+              "Status",
+              "Actions",
+            ]}
+            renderRow={(banner) => (
+              <tr
+                key={banner._id}
+                className="border-b border-gray-200 hover:bg-gray-50"
+              >
+                <td className="px-6 py-4">
+                  <img
+                    src={banner.imageUrl}
+                    className="h-10 rounded object-cover w-10"
+                    alt=""
+                  />
+                </td>
+                <td className="px-6 py-4 font-medium truncate max-w-xs">
+                  {banner.title
+                    ? banner.title?.substring(0, 10) + "..."
+                    : banner.title || "-"}
+                </td>
+                <td className="px-6 py-4 truncate max-w-xs">
+                  {banner.description
+                    ? banner.description?.substring(0, 10) + "..."
+                    : banner.description || "-"}
+                </td>
+                <td className="px-6 py-4">{banner.buttonText || "-"}</td>
+                <td className="px-6 py-4 truncate max-w-xs">
+                  {banner.buttonLink
+                    ? banner.buttonLink?.substring(0, 10) + "..."
+                    : banner.buttonLink || banner.link || "-"}
+                </td>
+                <td className="px-6 py-4">
+                  {banner.isActive ? (
+                    <span className="text-green-600 font-semibold">Active</span>
+                  ) : (
+                    <span className="text-gray-400">Inactive</span>
+                  )}
+                </td>
+                <td className="px-6 py-4 ">
+                  <div className="flex items-center justify-center gap-4">
+                    <button
+                      onClick={() => {
+                        setEditBannerId(banner._id);
+                        setSingleBannerData(banner);
+                      }}
+                    >
+                      <Pencil size={16} />
+                    </button>
+                    <button
+                      onClick={() =>
+                        toggleBannerStatus(banner._id, banner.isActive)
+                      }
+                    >
+                      {banner.isActive ? (
+                        <ToggleRight size={18} className="text-green-600" />
+                      ) : (
+                        <ToggleLeft size={18} className="text-gray-400" />
+                      )}
+                    </button>
+                    <button onClick={() => deleteBanner(banner._id)}>
+                      <Trash2 size={16} />
+                    </button>
+                  </div>
+                </td>
+              </tr>
+            )}
+          />
         </div>
-
-        <AdminTable
-          loading={loading}
-          data={banners}
-          emptyText="No banners found"
-          columns={[
-            "Image",
-            "Title",
-            "Description",
-            "Button",
-            "Link",
-            "Status",
-            "Actions",
-          ]}
-          renderRow={(banner) => (
-            <tr key={banner._id} className="border-b border-gray-200 hover:bg-gray-50">
-              <td className="px-6 py-4">
-                <img
-                  src={banner.imageUrl}
-                  className="h-10 rounded object-cover w-10"
-                  alt=""
-                />
-              </td>
-              <td className="px-6 py-4 font-medium truncate max-w-xs">
-                {banner.title  ? banner.title?.substring(0, 10) + "..." : banner.title || "-"} 
-              </td>
-              <td className="px-6 py-4 truncate max-w-xs">
-                {banner.description ? banner.description?.substring(0, 10) + "..." : banner.description || "-"} 
-              </td>
-              <td className="px-6 py-4">{banner.buttonText || "-"}</td>
-              <td className="px-6 py-4 truncate max-w-xs">
-                {banner.buttonLink ? banner.buttonLink?.substring(0, 10) + "..." : banner.buttonLink || banner.link || "-"}
-              </td>
-              <td className="px-6 py-4">
-                {banner.isActive ? (
-                  <span className="text-green-600 font-semibold">Active</span>
-                ) : (
-                  <span className="text-gray-400">Inactive</span>
-                )}
-              </td>
-              <td className="px-6 py-4 ">
-                <div className="flex items-center justify-center gap-4">
-                  <button
-                    onClick={() => {
-                      setEditBannerId(banner._id);
-                      setSingleBannerData(banner);
-                    }}
-                  >
-                    <Pencil size={16} />
-                  </button>
-                  <button
-                    onClick={() =>
-                      toggleBannerStatus(banner._id, banner.isActive)
-                    }
-                  >
-                    {banner.isActive ? (
-                      <ToggleRight size={18} className="text-green-600" />
-                    ) : (
-                      <ToggleLeft size={18} className="text-gray-400" />
-                    )}
-                  </button>
-                  <button onClick={() => deleteBanner(banner._id)}>
-                    <Trash2 size={16} />
-                  </button>
-                </div>
-              </td>
-            </tr>
-          )}
-        />
       </div>
     </div>
   );

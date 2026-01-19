@@ -7,6 +7,7 @@ import AdminTopbar from "../../../components/admin/AdminTopbar";
 import AdminTable from "../../../components/admin/AdminTable";
 import { confirmDelete } from "../../../utils/confirmDelete";
 import { NotepadText } from "lucide-react";
+import AdminMainHeader from "../../../components/admin/AdminMainHeader";
 
 export default function TemplateList() {
   const [template, settemplate] = useState([]);
@@ -40,18 +41,17 @@ export default function TemplateList() {
   return (
     <div>
       <AdminTopbar title={"Pages"} />
-      <div className="p-6">
+      <div className="flex justify-between items-center p-6">
+        <AdminMainHeader title="Manage your website pages content" />
+        <Link
+          to="/admin/add-template"
+          className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-md text-sm font-medium"
+        >
+          + Add Page
+        </Link>
+      </div>
+      <div className="px-6 pb-6">
         <div className="max-w-7xl mx-auto bg-white rounded-lg shadow">
-          <div className="flex justify-between items-center p-6 border-b border-gray-200">
-            <h2 className="text-xl font-bold">Page Management</h2>
-            <Link
-              to="/admin/add-template"
-              className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-md text-sm font-medium"
-            >
-              + Add Page
-            </Link>
-          </div>
-
           <AdminTable
             loading={loading}
             data={template}
@@ -70,7 +70,9 @@ export default function TemplateList() {
                     {p.title > 20 ? p.title.substring(0, 10) + "..." : p.title}
                   </div>
                 </td>
-                <td className="px-6 py-4">{p.updatedAt ? p.updatedAt?.slice(0, 10) : "-"}</td>
+                <td className="px-6 py-4">
+                  {p.updatedAt ? p.updatedAt?.slice(0, 10) : "-"}
+                </td>
                 <td className="px-6 py-4">
                   <div className="flex gap-4">
                     <Link to={`/admin/add-template/${p.slug}`}>
