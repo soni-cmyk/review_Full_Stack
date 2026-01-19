@@ -20,6 +20,8 @@ import AdminDashboard from "./pages/admin/AdminDashboard";
 import AdminTemplate from "./pages/admin/AdminTemplate";
 import PageEditor from "./pages/admin/templates/PageEditor";
 import ViewTemplate from "./pages/admin/templates/ViewTemplate";
+import CategoriesOrSubcategories from "./pages/admin/categoriesOrSubcategories/CategoriesOrSubcategories";
+import AdminCategory from "./pages/admin/AdminCategory";
 
 const Layout = () => {
   const location = useLocation();
@@ -81,7 +83,6 @@ const Layout = () => {
           }
         >
           <Route path="dashboard" element={<AdminDashboard />} />
-          <Route path="categories" element={<div>Admin Categories</div>} />
           <Route path="products" element={<AdminProducts />} />
           <Route path="add-product" element={<AddProduct />} />
           <Route path="add-product/:productId" element={<AddProduct />} />
@@ -91,6 +92,7 @@ const Layout = () => {
           <Route path="add-template" element={<PageEditor />} />
           <Route path="add-template/:templateId" element={<PageEditor />} />
           <Route path="template/:slug" element={<ViewTemplate />} />
+          <Route path="categories" element={<AdminCategory />} />
           <Route path="settings" element={<AdminSettings />} />
         </Route>
       </Routes>

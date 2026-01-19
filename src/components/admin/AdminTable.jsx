@@ -22,7 +22,7 @@ export default function AdminTable({
   }
 
   return (
-    <div className="overflow-x-auto">
+    <div className="overflow-x-auto rounded-lg">
       <table className="min-w-full text-sm text-left">
         <thead className="bg-gray-50 text-gray-700 uppercase text-xs">
           <tr>
