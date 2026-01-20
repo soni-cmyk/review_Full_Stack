@@ -6,7 +6,7 @@ import AdminTable from "../../components/admin/AdminTable";
 import { confirmDelete } from "../../utils/confirmDelete";
 import { AdminTopBar } from "../../components/admin/AdminTopbar";
 import AdminMainHeader from "../../components/admin/AdminMainHeader";
-import { Trash } from "lucide-react";
+import { Trash, Trash2 } from "lucide-react";
 
 export default function AdminReviews() {
   const [reviews, setReviews] = useState([]);
@@ -74,13 +74,13 @@ export default function AdminReviews() {
                 <td className="px-3 py-3">{r.userId?.email}</td>
                 <td className="px-3 py-3 text-xs font-mono">{r.ipAddress}</td>
                 <td className="px-3 py-3 ">
-                  <span className="bg-red-100 text-red-600 text-xs font-bold px-2 py-1 rounded-full">
+                  <span className="border border-gray-300 font-medium text-xs px-2 py-1 rounded-full">
                     FAKE
                   </span>
                 </td>
                 <td className="px-3 py-3">
                   <button onClick={() => deleteReview(r._id)}>
-                    <Trash size={18} />
+                    <Trash2 size={18} />
                   </button>
                 </td>
               </tr>
