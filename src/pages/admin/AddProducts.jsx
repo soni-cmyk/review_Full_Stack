@@ -58,7 +58,7 @@ export default function AddProduct() {
           sku: res.data.sku,
           supplierId: res.data.supplierId,
           categoryId: res.data.categoryId || "",
-          subCategoryIds: res.data.subCategoryIds || [],
+          subCategoryIds: res.data.subCategoryIds || "",
         });
         if (res.data.image?.url) {
           setPreview(`${res.data.image.url}`);
@@ -128,8 +128,8 @@ export default function AddProduct() {
       formData.append("desc", data.desc);
       formData.append("sku", data.sku);
       formData.append("supplierId", data.supplierId);
-      formData.append("categoryId", data.categoryId);
-      formData.append("subCategoryId", data.subCategoryIds);
+      formData.append("categoryId", data.categoryId?._id);
+      formData.append("subCategoryIds", data.subCategoryIds);
       if (imageFile) formData.append("image", imageFile);
 
       if (isEdit) {
@@ -255,6 +255,9 @@ export default function AddProduct() {
                 onChange={handleSubCategoryChange}
                 disabled={!data.categoryId}
               >
+                <option value="" style={{ display: "none" }}>
+                  Select Subcategory
+                </option>
                 {subCategories
                   .filter((sc) => {
                     return sc?.parentCategory?._id === data.categoryId;

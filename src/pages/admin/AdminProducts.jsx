@@ -60,7 +60,7 @@ export default function AdminProducts() {
               "Name",
               "SKU",
               "Supplier",
-              "Description",
+              "Category",
               "Rating",
               "Actions",
             ]}
@@ -76,12 +76,15 @@ export default function AdminProducts() {
                   />
                 </td>
                 <td className="px-3 py-3 font-medium">
-                  {p.name > 20 ? p.name.substring(0, 10) + "..." : p.name}
+                  <p>
+                    {p.name > 20 ? p.name.substring(0, 10) + "..." : p.name}
+                  </p>
+                  <p className="text-gray-500">{p.desc ? p.desc.substring(0, 10) + "..." : "-"}</p>
                 </td>
                 <td className="px-3 py-3">{p.sku}</td>
                 <td className="px-3 py-3">{p.supplierId}</td>
-                <td className="px-3 py-3 truncate max-w-xs">
-                  {p.desc ? p.desc.substring(0, 10) + "..." : "-"}
+                <td className="px-3 py-3">
+                  {p?.categoryId?.name}
                 </td>
                 <td className="px-3 py-3">{p.averageRating}</td>
                 <td className="px-3 py-3">
