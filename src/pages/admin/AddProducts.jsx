@@ -123,12 +123,14 @@ export default function AddProduct() {
 
     try {
       setLoading(true);
+      const categoryId = productId ? data.categoryId?._id : category[0]._id;
+      console.log(data, categoryId)
       const formData = new FormData();
       formData.append("name", data.name);
       formData.append("desc", data.desc);
       formData.append("sku", data.sku);
       formData.append("supplierId", data.supplierId);
-      formData.append("categoryId", data.categoryId?._id);
+      formData.append("categoryId" , categoryId );
       formData.append("subCategoryIds", data.subCategoryIds);
       if (imageFile) formData.append("image", imageFile);
 
