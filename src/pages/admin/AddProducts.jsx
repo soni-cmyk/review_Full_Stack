@@ -120,20 +120,38 @@ export default function AddProduct() {
 
   const submit = async () => {
     if (!validate()) return;
-
     try {
       setLoading(true);
-      const categoryId = productId ? data.categoryId?._id : category[0]._id;
-      console.log(data, categoryId)
+      // --- normalize categoryId ---
+      const getId = (v) => (typeof v === "object" ? v?._id : v);
+      const categoryId = productId
+        ? getId(data.categoryId)
+        : getId(category?.[0]?._id || category?.[0]); // fallback
+      // --- normalize subCategoryIds ---
+      const subCategoryIds = (
+        Array.isArray(data.subCategoryIds)
+          ? data.subCategoryIds
+          : [data.subCategoryIds]
+      )
+        .filter(Boolean)
+        .map(getId);
+
+      console.log("Normalized IDs:", { categoryId, subCategoryIds });
+
+      // --- build FormData ---
       const formData = new FormData();
       formData.append("name", data.name);
       formData.append("desc", data.desc);
       formData.append("sku", data.sku);
       formData.append("supplierId", data.supplierId);
-      formData.append("categoryId" , categoryId );
-      formData.append("subCategoryIds", data.subCategoryIds);
+      formData.append("categoryId", categoryId);
+
+      // append each subCategoryId separately
+      subCategoryIds.forEach((id) => formData.append("subCategoryIds", id));
+
       if (imageFile) formData.append("image", imageFile);
 
+      // --- call API ---
       if (isEdit) {
         await axios.put(`/products/${productId}`, formData);
         await Swal.fire({
@@ -153,6 +171,7 @@ export default function AddProduct() {
           showConfirmButton: false,
         });
       }
+
       navigate("/admin/products");
     } catch (err) {
       Swal.fire({

@@ -1,5 +1,5 @@
 const HotProducts = ({ products }) => {
-  const hotProducts = [...products]?.filter((p) => p.rating >= 4);
+  const hotProducts = [...products]?.filter((p) => p?.averageRating >= 4);
 
   return (
     <div className="bg-white rounded-lg shadow">
@@ -17,8 +17,8 @@ const HotProducts = ({ products }) => {
             <tr key={p.sku} className="border-b border-gray-200 hover:bg-gray-50">
               <td className="p-3 font-medium">{p.name}</td>
               <td className="p-3 text-left">{p.sku}</td>
-              <td className="flex items-center gap-1">
-                 {p.rating}
+              <td className="p-3 text-left">
+                 {p.averageRating}
               </td>
             </tr>
           ))}
