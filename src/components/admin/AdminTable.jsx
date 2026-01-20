@@ -18,8 +18,8 @@ export default function AdminTable({
       <table className="min-w-full text-sm text-left">
         <thead className="bg-gray-50 text-gray-700 uppercase text-xs">
           <tr>
-            {columns.map((col) => (
-              <th key={col} className="px-6 py-3 ">
+            {columns?.map((col) => (
+              <th key={col} className="px-3 py-3 ">
                 {col}
               </th>
             ))}
@@ -28,15 +28,15 @@ export default function AdminTable({
 
         <tbody>
           {
-            data.length === 0 && (
+            data?.length === 0 && (
               <tr>
-                <td colSpan={columns.length} className="px-6 py-4 text-center">
+                <td colSpan={columns?.length} className="px-6 py-4 text-center">
                   {emptyText}
                 </td>
               </tr>
             )
           }
-          {data.map(renderRow)}
+          {data?.map(renderRow)}
         </tbody>
       </table>
     </div>

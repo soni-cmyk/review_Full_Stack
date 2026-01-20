@@ -91,37 +91,37 @@ export default function BannerList({
                 key={banner._id}
                 className="border-b border-gray-200 hover:bg-gray-50"
               >
-                <td className="px-6 py-4">
+                <td className="px-3 py-3">
                   <img
                     src={banner.imageUrl}
-                    className="h-10 rounded object-cover w-10"
+                    className="h-8 rounded object-cover w-10"
                     alt=""
                   />
                 </td>
-                <td className="px-6 py-4 font-medium truncate max-w-xs">
+                <td className="px-3 py-3 font-medium truncate max-w-xs">
                   {banner.title
-                    ? banner.title?.substring(0, 10) + "..."
+                    ? banner.title?.substring(0, 20) + "..."
                     : banner.title || "-"}
                 </td>
-                <td className="px-6 py-4 truncate max-w-xs">
+                <td className="px-3 py-3 truncate max-w-xs">
                   {banner.description
-                    ? banner.description?.substring(0, 10) + "..."
+                    ? banner.description?.substring(0, 20) + "..."
                     : banner.description || "-"}
                 </td>
-                <td className="px-6 py-4">{banner.buttonText || "-"}</td>
-                <td className="px-6 py-4 truncate max-w-xs">
+                <td className="px-3 py-3">{banner.buttonText || "-"}</td>
+                <td className="px-3 py-3 truncate max-w-xs">
                   {banner.buttonLink
-                    ? banner.buttonLink?.substring(0, 10) + "..."
+                    ? banner.buttonLink?.substring(0, 20) + "..."
                     : banner.buttonLink || banner.link || "-"}
                 </td>
-                <td className="px-6 py-4">
+                <td className="px-3 py-3">
                   {banner.isActive ? (
                     <span className="text-green-600 font-semibold">Active</span>
                   ) : (
                     <span className="text-gray-400">Inactive</span>
                   )}
                 </td>
-                <td className="px-6 py-4 ">
+                <td className="px-3 py-3 ">
                   <div className="flex items-center justify-center gap-4">
                     <button
                       onClick={() => {
@@ -137,13 +137,13 @@ export default function BannerList({
                       }
                     >
                       {banner.isActive ? (
-                        <ToggleRight size={18} className="text-green-600" />
+                        <ToggleRight size={18}  />
                       ) : (
-                        <ToggleLeft size={18} className="text-gray-400" />
+                        <ToggleLeft size={18}  />
                       )}
                     </button>
                     <button onClick={() => deleteBanner(banner._id)}>
-                      <Trash2 size={16} />
+                      <Trash2 size={18} />
                     </button>
                   </div>
                 </td>

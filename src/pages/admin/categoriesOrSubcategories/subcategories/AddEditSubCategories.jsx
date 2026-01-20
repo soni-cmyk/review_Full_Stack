@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import AddCancelButton from "../../../../components/admin/buttons/AddCancelButton";
 
 export default function AddEditSubCategoriesModal({
   isOpen,
@@ -45,7 +46,7 @@ export default function AddEditSubCategoriesModal({
               required
               autoFocus
               placeholder="Enter category name"
-              className="w-full rounded-md border border-gray-300 px-3 py-2 text-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
+              className="w-full rounded-md border border-gray-300 px-3 py-2 text-sm"
             >
               <option value="" style={{ display: "none" }}>
                 Select a parent category
@@ -68,28 +69,16 @@ export default function AddEditSubCategoriesModal({
               required
               autoFocus
               placeholder="Enter category name"
-              className="w-full rounded-md border border-gray-300 px-3 py-2 text-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
+              className="w-full rounded-md border border-gray-300 px-3 py-2 text-sm"
             />
           </div>
 
-          <div className="flex justify-end gap-2 pt-2">
-            <button
-              type="button"
-              onClick={onClose}
-              disabled={loading}
-              className="rounded-md border px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 disabled:opacity-50"
-            >
-              Cancel
-            </button>
-
-            <button
-              type="submit"
-              disabled={loading}
-              className="rounded-md bg-blue-600 px-4 py-2 text-sm font-medium text-white hover:bg-blue-700 disabled:opacity-50"
-            >
-              {loading ? "Saving..." : "Save"}
-            </button>
-          </div>
+          <AddCancelButton
+            onClose={onClose}
+            loading={loading}
+            cancelBtnText="Cancel"
+            saveBtnText="Save"
+          />
         </form>
       </div>
     </div>

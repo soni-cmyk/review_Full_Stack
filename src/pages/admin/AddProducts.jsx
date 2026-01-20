@@ -2,7 +2,9 @@ import { useEffect, useState } from "react";
 import axios from "../../api/axios";
 import { useNavigate, useParams } from "react-router-dom";
 import Swal from "sweetalert2";
-import AdminTopbar from "../../components/admin/AdminTopbar";
+import { AdminTopBar } from "../../components/admin/AdminTopbar";
+import AddCancelButton from "../../components/admin/buttons/AddCancelButton";
+import AdminUploadFile from "../../components/admin/AdminUploadFile";
 
 const SUPPLIERS = ["SUP1", "SUP2", "SUP3"];
 
@@ -16,12 +18,35 @@ export default function AddProduct() {
     desc: "",
     sku: "",
     supplierId: "",
+    categoryId: "",
+    subCategoryIds: "",
   });
 
   const [imageFile, setImageFile] = useState(null);
   const [preview, setPreview] = useState("");
   const [errors, setErrors] = useState({});
   const [loading, setLoading] = useState(false);
+
+  const [subCategories, setSubCategories] = useState([]);
+  const [category, setCategory] = useState([]);
+
+  const fetch = async () => {
+    const res = await axios.get("/subcategories/all");
+    setSubCategories(res.data);
+  };
+
+  const fetchCategory = async () => {
+    const res = await axios.get("/categories");
+    setCategory(res.data);
+  };
+
+  useEffect(() => {
+    fetchCategory();
+  }, []);
+
+  useEffect(() => {
+    fetch();
+  }, [category]);
 
   // Fetch product (edit mode)
   useEffect(() => {
@@ -32,6 +57,8 @@ export default function AddProduct() {
           desc: res.data.desc,
           sku: res.data.sku,
           supplierId: res.data.supplierId,
+          categoryId: res.data.categoryId || "",
+          subCategoryIds: res.data.subCategoryIds || [],
         });
         if (res.data.image?.url) {
           setPreview(`${res.data.image.url}`);
@@ -41,8 +68,26 @@ export default function AddProduct() {
   }, [isEdit, productId]);
 
   const handleChange = (e) => {
-    setData({ ...data, [e.target.name]: e.target.value });
-    setErrors({ ...errors, [e.target.name]: "" });
+    const { name, value } = e.target;
+
+    // reset subcategories if category changes
+    if (name === "categoryId") {
+      setData({ ...data, categoryId: value, subCategoryIds: [] });
+      setErrors({ ...errors, categoryId: "", subCategoryIds: "" });
+      return;
+    }
+
+    setData({ ...data, [name]: value });
+    setErrors({ ...errors, [name]: "" });
+  };
+
+  const handleSubCategoryChange = (e) => {
+    const selected = Array.from(e.target.selectedOptions).map(
+      (opt) => opt.value,
+    );
+
+    setData({ ...data, subCategoryIds: selected });
+    setErrors({ ...errors, subCategoryIds: "" });
   };
 
   const handleImageChange = (e) => {
@@ -64,6 +109,9 @@ export default function AddProduct() {
     if (!data.name.trim()) newErrors.name = "Product name is required";
     if (!data.sku.trim()) newErrors.sku = "SKU is required";
     if (!data.supplierId) newErrors.supplierId = "Supplier is required";
+    if (!data.categoryId) newErrors.categoryId = "Category is required";
+    if (data.subCategoryIds.length === 0)
+      newErrors.subCategoryIds = "Select at least one subcategory";
     if (!isEdit && !imageFile) newErrors.image = "Product image is required";
 
     setErrors(newErrors);
@@ -80,7 +128,10 @@ export default function AddProduct() {
       formData.append("desc", data.desc);
       formData.append("sku", data.sku);
       formData.append("supplierId", data.supplierId);
+      formData.append("categoryId", data.categoryId);
+      formData.append("subCategoryId", data.subCategoryIds);
       if (imageFile) formData.append("image", imageFile);
+
       if (isEdit) {
         await axios.put(`/products/${productId}`, formData);
         await Swal.fire({
@@ -112,137 +163,155 @@ export default function AddProduct() {
     }
   };
 
+  const handleCancel = () => navigate("/admin/products");
+
   return (
     <div>
-      <AdminTopbar title={isEdit ? "Edit Product" : "Add Product"} />
+      <AdminTopBar title={isEdit ? "Edit Product" : "Add Product"} />
       <div className="bg-gray-100 flex items-center justify-center p-6">
-        <div className="w-full max-w-xl bg-white rounded-xl shadow-lg p-6">
+        <div className="w-full bg-white rounded-xl shadow-lg p-6">
           <h2 className="text-2xl font-bold text-gray-800 mb-6">
             {isEdit ? "Edit Product" : "Add New Product"}
           </h2>
 
-          {/* Product Name */}
-          <label className="block text-sm font-medium text-gray-700 mb-1">
-            Product Name *
-          </label>
-          <input
-            className="w-full rounded-lg border border-gray-300 px-3 py-2 mb-1 focus:outline-none focus:ring-2 focus:ring-blue-500"
-            name="name"
-            value={data.name}
-            onChange={handleChange}
-          />
-          <p className="text-red-500 text-sm mb-3">{errors.name}</p>
+          <div className="grid grid-cols-2 gap-3">
+            {/* Product Name */}
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">
+                Product Name *
+              </label>
+              <input
+                className="w-full rounded-lg border border-gray-300 px-3 py-2 mb-1"
+                name="name"
+                value={data.name}
+                onChange={handleChange}
+              />
+              <p className="text-red-500 text-sm">{errors.name}</p>
+            </div>
 
-          {/* Description */}
-          <label className="block text-sm font-medium text-gray-700 mb-1">
-            Description
-          </label>
-          <textarea
-            className="w-full rounded-lg border border-gray-300 px-3 py-2 mb-4 focus:outline-none focus:ring-2 focus:ring-blue-500"
-            name="desc"
-            value={data.desc}
-            onChange={handleChange}
-          />
+            {/* SKU */}
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">
+                SKU *
+              </label>
+              <input
+                className={`w-full rounded-lg border px-3 py-2 mb-1 ${
+                  isEdit
+                    ? "bg-gray-100 cursor-not-allowed border-gray-300"
+                    : "border-gray-300"
+                }`}
+                name="sku"
+                value={data.sku}
+                onChange={handleChange}
+                disabled={isEdit}
+              />
+              <p className="text-red-500 text-sm">{errors.sku}</p>
+            </div>
 
-          {/* SKU */}
-          <label className="block text-sm font-medium text-gray-700 mb-1">
-            SKU *
-          </label>
-          <input
-            className={`w-full rounded-lg border px-3 py-2 mb-1 focus:outline-none ${
-              isEdit
-                ? "bg-gray-100 cursor-not-allowed border-gray-300"
-                : "border-gray-300 focus:ring-2 focus:ring-blue-500"
-            }`}
-            name="sku"
-            value={data.sku}
-            onChange={handleChange}
-            disabled={isEdit}
-          />
-          <p className="text-red-500 text-sm mb-3">{errors.sku}</p>
+            {/* Description */}
+            <div className="col-span-2">
+              <label className="block text-sm font-medium text-gray-700 mb-1">
+                Description
+              </label>
+              <textarea
+                className="w-full rounded-lg border border-gray-300 px-3 py-2 mb-1"
+                name="desc"
+                value={data.desc}
+                onChange={handleChange}
+              />
+            </div>
 
-          {/* Image Upload */}
-          <label className="block text-sm font-medium text-gray-700 mb-1">
-            Product Image *
-          </label>
+            {/* Category */}
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">
+                Category *
+              </label>
+              <select
+                className="w-full rounded-lg border border-gray-300 px-3 py-2 mb-1 focus:outline-none"
+                name="categoryId"
+                value={data.categoryId}
+                onChange={handleChange}
+              >
+                <option value="" style={{ display: "none" }}>
+                  Select Category
+                </option>
+                {category.map((c) => (
+                  <option key={c._id} value={c._id}>
+                    {c.name}
+                  </option>
+                ))}
+              </select>
+              <p className="text-red-500 text-sm">{errors.categoryId}</p>
+            </div>
 
-          <div className="flex items-center gap-4 mb-1 bg-gray-100 rounded-md">
-            <input
-              type="file"
-              id="imageUpload"
-              accept="image/*"
-              onChange={handleImageChange}
-              className="hidden"
-            />
-            <label
-              htmlFor="imageUpload"
-              className="cursor-pointer inline-flex items-center justify-center rounded-tl-lg rounded-bl-lg   bg-gray-300 px-4 py-2 text-sm font-medium  "
-            >
-              Upload Image
-            </label>
-            {imageFile && (
-              <span className="text-sm text-gray-600 truncate max-w-[180px]">
-                {imageFile.name}
-              </span>
-            )}
+            {/* Subcategories */}
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">
+                Subcategories *
+              </label>
+              <select
+                className="w-full rounded-lg border border-gray-300 px-3 py-2 mb-1 focus:outline-none"
+                value={data.subCategoryIds}
+                onChange={handleSubCategoryChange}
+                disabled={!data.categoryId}
+              >
+                {subCategories
+                  .filter((sc) => {
+                    return sc?.parentCategory?._id === data.categoryId;
+                  })
+                  .map((sc) => (
+                    <option key={sc._id} value={sc._id}>
+                      {sc.name}
+                    </option>
+                  ))}
+              </select>
+              <p className="text-red-500 text-sm">{errors.subCategoryIds}</p>
+            </div>
+
+            {/* Supplier */}
+            <div className="col-span-2">
+              <label className="block text-sm font-medium text-gray-700 mb-1">
+                Supplier *
+              </label>
+              <select
+                className="w-full rounded-lg border border-gray-300 px-3 py-2 mb-1"
+                name="supplierId"
+                value={data.supplierId}
+                onChange={handleChange}
+              >
+                <option value="">Select Supplier</option>
+                {SUPPLIERS.map((s) => (
+                  <option key={s} value={s}>
+                    {s}
+                  </option>
+                ))}
+              </select>
+              <p className="text-red-500 text-sm">{errors.supplierId}</p>
+            </div>
+
+            {/* Image Upload */}
+            <div className="col-span-2">
+              <label className="block text-sm font-medium text-gray-700 mb-1">
+                Product Image *
+              </label>
+
+              <AdminUploadFile
+                file={imageFile}
+                handleFileChange={handleImageChange}
+                preview={preview}
+              />
+              <p className="text-red-500 text-sm">{errors.image}</p>
+            </div>
           </div>
-          <p className="text-red-500 text-sm mb-3">{errors.image}</p>
-          {preview && (
-            <img
-              src={preview}
-              alt="Preview"
-              className="h-40 w-full object-cover rounded-lg border border-gray-300 mb-4"
-            />
-          )}
-          {/* Supplier */}
-          <label className="block text-sm font-medium text-gray-700 mb-1">
-            Supplier *
-          </label>
-          <select
-            className="w-full rounded-lg border border-gray-300 px-3 py-2 mb-1 focus:outline-none focus:ring-2 focus:ring-blue-500"
-            name="supplierId"
-            value={data.supplierId}
-            onChange={handleChange}
-          >
-            <option value="">Select Supplier</option>
-            {SUPPLIERS.map((s) => (
-              <option key={s} value={s}>
-                {s}
-              </option>
-            ))}
-          </select>
-          {errors.supplierId && (
-            <p className="text-red-500 text-sm mb-4">{errors.supplierId}</p>
-          )}
 
           {/* Buttons */}
-          <div className="flex gap-4 mt-6">
-            <button
-              type="button"
-              onClick={() => navigate("/admin/products")}
-              className="flex-1 rounded-lg bg-red-500 py-2 text-white font-medium hover:bg-red-600 transition"
-            >
-              Cancel
-            </button>
-
-            <button
-              onClick={submit}
-              disabled={loading}
-              className={`flex-1 rounded-lg py-2 font-medium text-white transition ${
-                loading
-                  ? "bg-gray-400 cursor-not-allowed"
-                  : "bg-black hover:bg-gray-900"
-              }`}
-            >
-              {loading
-                ? isEdit
-                  ? "Updating..."
-                  : "Adding..."
-                : isEdit
-                ? "Update Product"
-                : "Add Product"}
-            </button>
-          </div>
+          <AddCancelButton
+            onClose={handleCancel}
+            loading={loading}
+            cancelBtnText="Cancel"
+            saveBtnText={isEdit ? "Update Product" : "Add Product"}
+            onSubmit={submit}
+          />
         </div>
       </div>
     </div>

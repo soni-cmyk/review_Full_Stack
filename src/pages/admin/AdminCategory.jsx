@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import AdminMainHeader from "../../components/admin/AdminMainHeader";
-import AdminTopbar from "../../components/admin/AdminTopbar";
+import { AdminTopBar } from "../../components/admin/AdminTopbar";
 import CategoriesOrSubcategories from "./categoriesOrSubcategories/CategoriesOrSubcategories";
 import AddEditCategoriesModal from "./categoriesOrSubcategories/categories/AddEditCategoriesModal";
 import AddEditSubCategoriesModal from "./categoriesOrSubcategories/subcategories/AddEditSubCategories";
@@ -103,8 +103,6 @@ const AdminCategory = () => {
       setLoading(false);
     }
   };
-
-  console.log(selectedSubCategory, "=====>2222");
   // =======================
   // OPEN MODALS
   // =======================
@@ -130,7 +128,7 @@ const AdminCategory = () => {
 
   return (
     <div>
-      <AdminTopbar title="Categories & Subcategories" />
+      <AdminTopBar title="Categories & Subcategories" />
 
       <div className="flex justify-between items-center p-6">
         <AdminMainHeader title="Organize your products with categories" />

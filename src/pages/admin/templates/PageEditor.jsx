@@ -4,8 +4,8 @@ import "react-quill/dist/quill.snow.css";
 import axios from "../../../api/axios";
 import Swal from "sweetalert2";
 import { useNavigate, useParams } from "react-router-dom";
-import AdminTopbar from "../../../components/admin/AdminTopbar";
-
+import AddCancelButton from "../../../components/admin/buttons/AddCancelButton";
+import { AdminTopBar } from "../../../components/admin/AdminTopbar";
 /* ===============================
    QUILL CONFIG
 ================================ */
@@ -58,14 +58,14 @@ const PageEditor = () => {
   /* ===============================
      AUTO SLUG FROM TITLE
   ================================ */
-  const handleTitleChange = (value) => {
+  const handleTitleChange = (value) => {  
     setTitle(value);
     setSlug(
       value
         .toLowerCase()
         .trim()
         .replace(/[^a-z0-9]+/g, "-")
-        .replace(/^-+|-+$/g, "")
+        .replace(/^-+|-+$/g, ""),
     );
     setError({});
   };
@@ -78,16 +78,13 @@ const PageEditor = () => {
       setError({ title: "Title is required" });
       return;
     }
-
     if (!content || content === "<p><br></p>") {
       setError({ content: "Content is required" });
       return;
     }
-
     try {
       const payload = { title, slug, content };
       await axios.post("/templates", payload);
-
       Swal.fire({
         icon: "success",
         title: "Page Saved",
@@ -136,7 +133,6 @@ const PageEditor = () => {
       setError({ content: "Content is required" });
       return;
     }
-
     try {
       const payload = { title, slug, content };
       await axios.put(`/templates/${templateId}`, payload);
@@ -161,10 +157,14 @@ const PageEditor = () => {
     }
   };
 
+  const handleCancelBtn = () => {
+    navigate("/admin/template");
+  };
+
   return (
     <div>
-      <AdminTopbar title={"Create New Page"} />
-      <div className="max-w-4xl mx-auto p-6">
+      <AdminTopBar title={"Create New Page"} />
+      <div className="p-6">
         <div className="bg-white rounded-lg shadow-md p-6 space-y-6">
           <h1 className="text-2xl font-bold">Create New Page</h1>
           <div className="flex gap-2 mb-4">
@@ -216,21 +216,13 @@ const PageEditor = () => {
             )}
           </div>
 
-          {/* SAVE BUTTON */}
-          <div className="text-right">
-            <button
-              onClick={() => navigate("/admin/template")}
-              className="px-4 py-2 rounded-md mr-2 border border-gray-300 bg-red-600 text-white"
-            >
-              Cancel
-            </button>
-            <button
-              onClick={handleSave}
-              className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-md"
-            >
-              Save Page
-            </button>
-          </div>
+          {/* cancel and save BUTTON */}
+          <AddCancelButton
+            onClose={handleCancelBtn}
+            cancelBtnText="Cancel"
+            saveBtnText="Save"
+            onSubmit={templateId ? handleEditSave : handleSave}
+          />
         </div>
       </div>
     </div>

@@ -1,6 +1,8 @@
 import { useEffect, useState } from "react";
 import axios from "../../../api/axios";
 import Swal from "sweetalert2";
+import AddCancelButton from "../../../components/admin/buttons/AddCancelButton";
+import AdminUploadFile from "../../../components/admin/AdminUploadFile";
 
 export default function AddEditBanner({
   editBannerId,
@@ -87,7 +89,7 @@ export default function AddEditBanner({
       Swal.fire(
         "Success",
         `Banner ${editBannerId ? "updated" : "created"} successfully`,
-        "success"
+        "success",
       );
 
       resetForm();
@@ -119,10 +121,10 @@ export default function AddEditBanner({
     setEditBannerId(null);
     setAddBanner(false);
   };
-   
+
   return (
     <div className="flex justify-center items-center">
-      <div className="p-6 w-full max-w-xl space-y-4 bg-white rounded-lg shadow m-6">
+      <div className="p-6 w-full space-y-3 bg-white rounded-lg shadow m-6">
         <h2 className="text-2xl font-bold mb-4">
           {editBannerId ? "Edit Banner" : "Add New Banner"}
         </h2>
@@ -166,7 +168,7 @@ export default function AddEditBanner({
           />
         </div>
 
-        <input
+        {/* <input
           type="text"
           name="link"
           placeholder="Redirect Link"
@@ -174,7 +176,7 @@ export default function AddEditBanner({
           onChange={handleChange}
           className="w-full border border-gray-200 rounded-lg p-2"
           disabled={loading}
-        />
+        /> */}
 
         <div className="flex items-center gap-2">
           <input
@@ -186,43 +188,18 @@ export default function AddEditBanner({
           />
           <span className="text-sm">Show banner on website</span>
         </div>
-
-        <input
-          type="file"
-          accept="image/*"
-          onChange={handleFileChange}
-          disabled={loading}
+        <AdminUploadFile
+          file={image}
+          handleFileChange={handleFileChange}
+          preview={preview}
         />
-
-        {preview && (
-          <img
-            src={preview}
-            alt="Preview"
-            className="max-w-md rounded-lg border border-gray-200"
-          />
-        )}
-
-        <div className="flex gap-4 w-full">
-          <button
-            onClick={() => handleCancel()}
-            disabled={loading}
-            className={`bg-red-600 w-1/2 hover:bg-red-700 text-white px-6 py-2 rounded-lg ${
-              loading ? "opacity-50 cursor-not-allowed" : ""
-            }`}
-          >
-            Cancel
-          </button>
-
-          <button
-            onClick={submitBanner}
-            disabled={loading}
-            className={`bg-blue-600 w-1/2 hover:bg-blue-700 text-white px-6 py-2 rounded-lg ${
-              loading ? "opacity-50 cursor-not-allowed" : ""
-            }`}
-          >
-            {editBannerId ? "Update Banner" : "Upload Banner"}
-          </button>
-        </div>
+        <AddCancelButton
+          onClose={handleCancel}
+          loading={loading}
+          cancelBtnText="Cancel"
+          saveBtnText={editBannerId ? "Update Banner" : "Upload Banner"}
+          onSubmit={submitBanner}
+        />
       </div>
     </div>
   );

@@ -4,7 +4,7 @@ import { useReview } from "../../context/ReviewContext";
 import Swal from "sweetalert2";
 import AdminTable from "../../components/admin/AdminTable";
 import { confirmDelete } from "../../utils/confirmDelete";
-import AdminTopbar from "../../components/admin/AdminTopbar";
+import { AdminTopBar } from "../../components/admin/AdminTopbar";
 import AdminMainHeader from "../../components/admin/AdminMainHeader";
 
 export default function AdminReviews() {
@@ -41,7 +41,7 @@ export default function AdminReviews() {
 
   return (
     <div>
-      <AdminTopbar title="Fake Review Management" />
+      <AdminTopBar title="Fake Review Management" />
       <div className="flex justify-between items-center p-6">
         <AdminMainHeader title="Manage your fake reviews" />
       </div>

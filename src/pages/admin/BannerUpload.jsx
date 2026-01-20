@@ -1,6 +1,6 @@
 import react from "react";
 import BannerList from "./banner/BannerList";
-import AdminTopbar from "../../components/admin/AdminTopbar";
+import { AdminTopBar } from "../../components/admin/AdminTopbar";
 import AddEditBanner from "./banner/AddEditBanner";
 export default function BannerUpload() {
   const [addBanner, setAddBanner] = react.useState(false);
@@ -10,7 +10,7 @@ export default function BannerUpload() {
 
   return (
     <div>
-      <AdminTopbar title={"Banner Upload"} />
+      <AdminTopBar title={"Banner Upload"} />
       {addBanner || editBannerId ? (
         <AddEditBanner
           addBanner={addBanner}

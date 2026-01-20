@@ -3,7 +3,7 @@ import axios from "../../../api/axios";
 import { Link } from "react-router-dom";
 import Swal from "sweetalert2";
 import { Pencil, Trash2 } from "lucide-react";
-import AdminTopbar from "../../../components/admin/AdminTopbar";
+import { AdminTopBar } from "../../../components/admin/AdminTopbar";
 import AdminTable from "../../../components/admin/AdminTable";
 import { confirmDelete } from "../../../utils/confirmDelete";
 import { NotepadText } from "lucide-react";
@@ -40,7 +40,7 @@ export default function TemplateList() {
 
   return (
     <div>
-      <AdminTopbar title={"Pages"} />
+      <AdminTopBar title={"Pages"} />
       <div className="flex justify-between items-center p-6">
         <AdminMainHeader title="Manage your website pages content" />
         <Link
@@ -62,7 +62,7 @@ export default function TemplateList() {
                 key={p._id}
                 className="border-b border-gray-200 hover:bg-gray-50"
               >
-                <td className="px-6 py-4 font-medium">
+                <td className="px-3 py-3 font-medium">
                   <div className="flex items-center gap-2">
                     <Link to={`/admin/template/${p.slug}`}>
                       <NotepadText size={18} />
@@ -70,16 +70,16 @@ export default function TemplateList() {
                     {p.title > 20 ? p.title.substring(0, 10) + "..." : p.title}
                   </div>
                 </td>
-                <td className="px-6 py-4">
+                <td className="px-3 py-3">
                   {p.updatedAt ? p.updatedAt?.slice(0, 10) : "-"}
                 </td>
-                <td className="px-6 py-4">
+                <td className="px-3 py-3">
                   <div className="flex gap-4">
                     <Link to={`/admin/add-template/${p.slug}`}>
                       <Pencil size={18} />
                     </Link>
                     <button onClick={() => deleteProduct(p.slug)}>
-                      <Trash2 size={18} color="red" />
+                      <Trash2 size={18} />
                     </button>
                   </div>
                 </td>

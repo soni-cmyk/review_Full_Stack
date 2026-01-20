@@ -1,6 +1,11 @@
 import React, { useState, useEffect } from "react";
 import axios from "../../../api/axios";
 import Swal from "sweetalert2";
+import { AdminTopBar } from "../../../components/admin/AdminTopbar";
+import AdminMainHeader from "../../../components/admin/AdminMainHeader";
+import AdminUploadFile from "../../../components/admin/AdminUploadFile";
+import { useNavigate } from "react-router-dom";
+import AddCancelButton from "../../../components/admin/buttons/AddCancelButton";
 
 const AdminSettings = () => {
   const [logoFile, setLogoFile] = useState(null);
@@ -9,6 +14,7 @@ const AdminSettings = () => {
 
   const [logoWidth, setLogoWidth] = useState("");
   const [logoHeight, setLogoHeight] = useState("");
+  const navigate = useNavigate();
 
   // Load logos and select active
   useEffect(() => {
@@ -28,13 +34,11 @@ const AdminSettings = () => {
   };
 
   const handleUpload = async () => {
-    if (!logoFile) return alert("Please select an image");
-
+    if (!logoFile) return Swal.fire("Error", "Logo is required", "error");
     const formData = new FormData();
     formData.append("image", logoFile); // must match backend
     formData.append("logoWidth", logoWidth);
     formData.append("logoHeight", logoHeight);
-
     await axios.post("/logos", formData, {
       headers: { "Content-Type": "multipart/form-data" },
     });
@@ -47,74 +51,71 @@ const AdminSettings = () => {
     loadLogo();
   };
 
+  const handleCancel = () => {
+    setLogoFile(null);
+    setPreview("");
+    setLogoWidth("");
+    setLogoHeight("");
+    navigate("/admin/dashboard")
+  }
   return (
-    <div className="max-w-3xl mx-auto my-8 p-6 space-y-8 bg-white rounded-lg shadow">
-      <h3 className="text-xl font-bold">Admin Settings – Logo</h3>
-
-      {/* Active logo */}
-      <div className="border border-gray-200 rounded-lg p-6">
-        <h2 className="text-lg font-semibold mb-4">Current Active Logo</h2>
-
-        {activeLogo ? (
-          <img
-            src={activeLogo.logoUrl}
-            alt="logo"
-            style={{
-              width: activeLogo.logoWidth || "auto",
-              height: activeLogo.logoHeight || "auto",
-            }}
-            className="object-contain mx-auto"
-          />
-        ) : (
-          <p className="text-gray-500 text-center">No active logo set</p>
-        )}
+    <div>
+      <AdminTopBar title="Admin Settings" />
+      <div className="flex justify-between items-center p-6">
+        <AdminMainHeader title="Manage your admin settings with ease" />
       </div>
-
-      {/* Upload */}
-      <div className="border border-gray-200 rounded-lg p-6 space-y-4">
-        <h2 className="text-lg font-semibold">Upload New Logo</h2>
-
-        {preview && (
-          <img
-            src={preview}
-            className="h-20 object-contain mx-auto"
-            alt="preview"
-          />
-        )}
-
-        <input
-          type="file"
-          accept="image/*"
-          name="image"
-          onChange={handleFileChange}
-          className="border border-gray-300 rounded p-2 w-full"
-        />
-
-        {/* Width & Height */}
-        <div className="grid grid-cols-2 gap-4">
-          <input
-            type="number"
-            placeholder="Logo Width (px)"
-            value={logoWidth}
-            onChange={(e) => setLogoWidth(e.target.value)}
-            className="border border-gray-300 rounded p-2 w-full"
-          />
-
-          <input
-            type="number"
-            placeholder="Logo Height (px)"
-            value={logoHeight}
-            onChange={(e) => setLogoHeight(e.target.value)}
-            className="border border-gray-300 rounded p-2 w-full"
-          />
+      <div className="mx-6 mb-6 p-6 bg-white space-y-3 rounded-lg shadow">
+        <h2 className="text-lg font-semibold mb-2">Current Active Logo</h2>
+        {/* Active logo */}
+        <div className="border border-gray-200 rounded-lg p-6">
+          {activeLogo ? (
+            <img
+              src={activeLogo.logoUrl}
+              alt="logo"
+              style={{
+                width: activeLogo.logoWidth || "auto",
+                height: activeLogo.logoHeight || "auto",
+              }}
+              className="object-contain max-h-20"
+            />
+          ) : (
+            <p className="text-gray-500 text-center">No active logo set</p>
+          )}
         </div>
 
-        <button
-          onClick={handleUpload}
-          className="bg-blue-600 text-white px-5 py-2 rounded-lg"
-        >
-          Save Logo
-        </button>
+        {/* Upload */}
+        <div className="border border-gray-200 rounded-lg p-6 space-y-3">
+          <h2 className="text-lg font-semibold mb-2">Upload New Logo</h2>
+          <AdminUploadFile
+            file={logoFile}
+            handleFileChange={handleFileChange}
+            preview={preview}
+          />
+
+          {/* Width & Height */}
+          <div className="grid grid-cols-2 gap-4">
+            <input
+              type="number"
+              placeholder="Max Logo Width (px)"
+              value={logoWidth}
+              onChange={(e) => setLogoWidth(e.target.value)}
+              className="border border-gray-300 rounded p-2 w-full"
+            />
+            <input
+              type="number"
+              placeholder="Max Logo Height (px)"
+              value={logoHeight}
+              onChange={(e) => setLogoHeight(e.target.value)}
+              className="border border-gray-300 rounded p-2 w-full"
+            />
+          </div>
+          <AddCancelButton
+            onClose={handleCancel}
+            cancelBtnText="Cancel"
+            saveBtnText={"Save"}
+            onSubmit={handleUpload}
+          />
+        </div>
       </div>
     </div>
   );

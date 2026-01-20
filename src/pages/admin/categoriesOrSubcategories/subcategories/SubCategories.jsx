@@ -44,23 +44,23 @@ export default function SubCategories({
         loading={loading}
         data={subcategories}
         emptyText="No subcategories found"
-        columns={["Name", "Subcategories", "Actions"]}
+        columns={["Name", "Parent Category", "Actions"]}
         renderRow={(p) => (
           <tr key={p._id} className="border-b border-gray-200 bg-white hover:bg-gray-50">
-            <td className="px-6 py-4 font-medium">
+            <td className="px-3 py-3 font-medium">
               <div className="flex items-center gap-2">
-                <FolderOpen />
+                <FolderOpen size={18} />
                 {p.name > 20 ? p.name.substring(0, 10) + "..." : p.name}
               </div>
             </td>
-            <td className="px-6 py-4">
-              <button className="border border-gray-300 px-3 py-1 rounded-full text-sm">
+            <td className="px-3 py-3">
+              <button className="border border-gray-300 px-2 py-1 rounded-full text-xs">
                 {p.parentCategory?.name || "-"}
               </button>
             </td>
-            <td className="px-6 py-4">
+            <td className="px-3 py-3">
               <div className="flex gap-4">
-                <Pencil size={18} onClick={() => onEditSubCategories(p)} />
+                <Pencil size={18} onClick={() => onEditSubCategories(p)} className="cursor-pointer" />
                 <button
                   onClick={() =>
                     deleteProduct({
@@ -69,7 +69,7 @@ export default function SubCategories({
                     })
                   }
                 >
-                  <Trash2 size={18} color="red" />
+                  <Trash2 size={18} />
                 </button>
               </div>
             </td>
