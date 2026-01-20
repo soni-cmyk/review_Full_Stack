@@ -6,6 +6,7 @@ import AdminTable from "../../components/admin/AdminTable";
 import { confirmDelete } from "../../utils/confirmDelete";
 import { AdminTopBar } from "../../components/admin/AdminTopbar";
 import AdminMainHeader from "../../components/admin/AdminMainHeader";
+import { Trash } from "lucide-react";
 
 export default function AdminReviews() {
   const [reviews, setReviews] = useState([]);
@@ -47,7 +48,6 @@ export default function AdminReviews() {
       </div>
       <div className="px-6 pb-6">
         <div className="max-w-7xl mx-auto bg-white rounded-lg shadow">
-
           <AdminTable
             loading={loading}
             data={reviews}
@@ -67,30 +67,27 @@ export default function AdminReviews() {
                 key={r._id}
                 className="border-b border-gray-200 hover:bg-gray-50"
               >
-                <td className="px-6 py-4">{idx + 1}</td>
-                <td className="px-6 py-4 truncate max-w-xs">{r.review}</td>
-                <td className="px-6 py-4">{r.rating}</td>
-                <td className="px-6 py-4">{r.productId?.name}</td>
-                <td className="px-6 py-4">{r.userId?.email}</td>
-                <td className="px-6 py-4 text-xs font-mono">{r.ipAddress}</td>
-                <td className="px-6 py-4 ">
+                <td className="px-3 py-3">{idx + 1}</td>
+                <td className="px-3 py-3 truncate max-w-xs">{r.review}</td>
+                <td className="px-3 py-3">{r.rating}</td>
+                <td className="px-3 py-3">{r.productId?.name}</td>
+                <td className="px-3 py-3">{r.userId?.email}</td>
+                <td className="px-3 py-3 text-xs font-mono">{r.ipAddress}</td>
+                <td className="px-3 py-3 ">
                   <span className="bg-red-100 text-red-600 text-xs font-bold px-2 py-1 rounded-full">
                     FAKE
                   </span>
                 </td>
-                <td className="px-6 py-4">
-                  <button
-                    onClick={() => deleteReview(r._id)}
-                    className="bg-red-500 hover:bg-red-600 text-white px-3 py-1.5 rounded text-xs font-medium transition"
-                  >
-                    Delete
+                <td className="px-3 py-3">
+                  <button onClick={() => deleteReview(r._id)}>
+                    <Trash size={18} />
                   </button>
                 </td>
               </tr>
             )}
           />
         </div>
-      </div>{" "}
+      </div>
     </div>
   );
 }

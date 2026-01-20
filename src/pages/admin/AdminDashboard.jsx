@@ -5,10 +5,34 @@ import RecentlyAdded from "./dashboard/RecenltyAdded";
 import AdminStatCard from "../../components/admin/AdminStatCard";
 import { useEffect, useState } from "react";
 import { AdminTopBar } from "../../components/admin/AdminTopbar";
-
+import axios from "../../api/axios";
 
 const AdminDashboard = () => {
   const [currentDate, setCurrentDate] = useState("");
+  const [subCategories, setSubCategories] = useState([]);
+  const [category, setCategory] = useState([]);
+  const [products, setProducts] = useState([]);
+
+  const fetch = async () => {
+    const res = await axios.get("/subcategories/all");
+    setSubCategories(res.data);
+  };
+
+  const fetchCategory = async () => {
+    const res = await axios.get("/categories");
+    setCategory(res.data);
+  };
+
+  const fetchProducts = async () => {
+    const res = await axios.get("/products");
+    setProducts(res.data);
+  };
+
+  useEffect(() => {
+    fetchCategory();
+    fetch();
+    fetchProducts();
+  }, []);
 
   useEffect(() => {
     const updateTime = () => {
@@ -41,29 +65,28 @@ const AdminDashboard = () => {
         </div>
 
         {/* Stats Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           <AdminStatCard
             title="Total Products"
-            value="156"
+            value={products?.length || 0}
             icon={<Package />}
           />
           <AdminStatCard
             title="Total Categories"
-            value="24"
+            value={category?.length || 0}
             icon={<Layers />}
           />
           <AdminStatCard
             title="Total Subcategories"
-            value="89"
+            value={subCategories?.length || 0}
             icon={<Boxes />}
           />
-          <AdminStatCard title="Hot Products" value="12" icon={<Flame />} />
         </div>
 
         {/* Tables */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-          <HotProducts />
-          <RecentlyAdded />
+          <HotProducts products={products} />
+          <RecentlyAdded products={products} />
         </div>
       </div>
     </div>
